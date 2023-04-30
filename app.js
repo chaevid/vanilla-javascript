@@ -116,6 +116,9 @@ function setBackgroundImage() {
     })
     .catch((error) => {
       console.error('Error fetching background image:', error);
+      document.querySelector(
+        '.background'
+      ).style.backgroundImage = `url('/src/bg-image-unsplash.jpg')`;
     });
 }
 
