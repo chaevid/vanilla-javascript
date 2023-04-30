@@ -1,0 +1,124 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+  height: 100%;
+}
+
+h1,
+h2 {
+  margin: 8px 0px;
+}
+
+p {
+  text-shadow: 0px 0px 5px black;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  color: white;
+}
+
+.clock {
+  font-size: 3em;
+  text-shadow: 0px 0px 5px black;
+  margin-bottom: 16px;
+}
+
+.name-form,
+.todo-form {
+  display: flex;
+  width: 100%;
+  max-width: 400px;
+}
+.greeting {
+  text-shadow: 0px 0px 5px black;
+}
+.name-form input,
+.todo-form input {
+  flex-grow: 1;
+  margin-top: 24px;
+  padding: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid white;
+  color: black;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.todo-list li {
+  padding: 10px;
+  font-size: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.location-container {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  font-size: 14px;
+}
+
+.latlon {
+  text-align: left;
+}
+
+.weather {
+  text-align: right;
+}
+
+.remove-button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+  padding: 0;
+}
+
+.remove-button:focus {
+  outline: none;
+}
