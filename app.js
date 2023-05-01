@@ -1,4 +1,3 @@
-const UNSPLASH_API_KEY = 'DYWZDzYyj9BIU9ezT9j00UG8sqjm7KdOzxUQAxoueFs';
 const OPENWEATHERMAP_API_KEY = 'ba0a7ac8b4aa1d89506ec1b502dd04cb';
 const PROJECT_DOMAIN = 'https://chaevid.github.io/vanilla-javascript';
 
@@ -108,19 +107,22 @@ displayTodos(JSON.parse(localStorage.getItem('todos')) || []);
 
 // Background Image
 function setBackgroundImage() {
-  fetch(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_API_KEY}`)
-    .then((response) => response.json())
-    .then((data) => {
-      document.querySelector(
-        '.background'
-      ).style.backgroundImage = `url(${data.urls.regular})`;
-    })
-    .catch((error) => {
-      console.error('Error fetching background image:', error);
-      document.querySelector(
-        '.background'
-      ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
-    });
+  document.querySelector(
+    '.background'
+  ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
+  // fetch(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_API_KEY}`)
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     document.querySelector(
+  //       '.background'
+  //     ).style.backgroundImage = `url(${data.urls.regular})`;
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error fetching background image:', error);
+  //     document.querySelector(
+  //       '.background'
+  //     ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
+  //   });
 }
 
 setBackgroundImage();
