@@ -11,49 +11,57 @@ function updateTime() {
   clock.textContent = `${hours}:${minutes}:${seconds}`;
 }
 
-function initClock() {
-  updateTime();
-  setInterval(updateTime, 1000);
-}
+updateTime();
+setInterval(updateTime, 1000);
 
 // Name & Greeting
+const nameForm = document.getElementById('name-form');
+const nameInput = document.getElementById('name-input');
+const greeting = document.querySelector('.greeting');
+
 function saveName(name) {
   localStorage.setItem('name', name);
 }
 
 function setName(name) {
-  const greeting = document.querySelector('.greeting');
-  const nameForm = document.getElementById('name-form');
-  const todoInput = document.getElementById('todo-input');
-
   greeting.textContent = `Hello, ${name}!`;
   saveName(name);
   todoInput.style.display = 'block';
-  nameForm.style.display = 'none';
 }
 
-function handleNameFormSubmit(e) {
-  const nameInput = document.getElementById('name-input');
+nameForm.addEventListener('submit', (e) => {
   e.preventDefault();
   setName(nameInput.value);
   nameInput.value = '';
-}
-
-function initNameAndGreeting() {
-  const nameForm = document.getElementById('name-form');
-  const storedName = localStorage.getItem('name');
-
-  if (storedName) {
-    setName(storedName);
-  } else {
-    const greeting = document.querySelector('.greeting');
-    greeting.textContent = '';
-  }
-
-  nameForm.addEventListener('submit', handleNameFormSubmit);
-}
+  nameForm.style.display = 'none';
+});
 
 // To-Do List
+const todoForm = document.getElementById('todo-form');
+const todoInput = document.getElementById('todo-input');
+const todoList = document.querySelector('.todo-list');
+
+// Hide the todo-input initially
+todoInput.style.display = 'none';
+
+// Check if a name is already saved in localStorage
+const storedName = localStorage.getItem('name');
+if (storedName) {
+  setName(storedName);
+  nameForm.style.display = 'none';
+  todoInput.style.display = 'block';
+} else {
+  greeting.textContent = '';
+}
+
+//
+// const savedName = localStorage.getItem('name');
+// if (savedName) {
+//   nameInput.style.display = 'none';
+//   // displayGreeting(savedName);
+//   greeting.style.display = 'block';
+//   todoInput.style.display = 'block';
+// }
 function saveTodos(todos) {
   localStorage.setItem('todos', JSON.stringify(todos));
 }
@@ -73,15 +81,13 @@ function addTodo(todoText) {
 }
 
 function displayTodos(todos) {
-  const todoList = document.querySelector('.todo-list');
   todoList.innerHTML = '';
-
   todos.forEach((todo) => {
     const li = document.createElement('li');
     li.classList.add('todo-item');
-    const todoTextElement = document.createElement('span');
-    todoTextElement.textContent = todo;
-    li.appendChild(todoTextElement);
+    const todoText = document.createElement('span');
+    todoText.textContent = todo;
+    li.appendChild(todoText);
     const xButton = document.createElement('button');
     xButton.textContent = 'X';
     xButton.classList.add('remove-button');
@@ -91,30 +97,42 @@ function displayTodos(todos) {
   });
 }
 
-function handleTodoFormSubmit(e) {
-  const todoInput = document.getElementById('todo-input');
+todoForm.addEventListener('submit', (e) => {
   e.preventDefault();
   addTodo(todoInput.value);
   todoInput.value = '';
-}
+});
 
-function initTodoList() {
-  const todoForm = document.getElementById('todo-form');
-  const todoInput = document.getElementById('todo-input');
-  todoInput.style.display = 'none';
-  displayTodos(JSON.parse(localStorage.getItem('todos')) || []);
-  todoForm.addEventListener('submit', handleTodoFormSubmit);
-}
+displayTodos(JSON.parse(localStorage.getItem('todos')) || []);
 
 // Background Image
 function setBackgroundImage() {
   document.querySelector(
     '.background'
   ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
+  // fetch(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_API_KEY}`)
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     document.querySelector(
+  //       '.background'
+  //     ).style.backgroundImage = `url(${data.urls.regular})`;
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error fetching background image:', error);
+  //     document.querySelector(
+  //       '.background'
+  //     ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
+  //   });
 }
+
+setBackgroundImage();
 
 // Geolocation
 function displayLocation(position) {
+  const latlonElement = document.querySelector('.latlon');
+  latlonElement.textContent = `Lat: ${position.coords.latitude.toFixed(
+    2
+  )}, Lon: ${position.coords.longitude.toFixed(2)}`;
   getWeather(position.coords.latitude, position.coords.longitude);
 }
 
@@ -124,40 +142,20 @@ function getWeather(latitude, longitude) {
   )
     .then((response) => response.json())
     .then((data) => {
-      const locationElement = document.querySelector('.location');
       const weatherElement = document.querySelector('.weather');
-      locationElement.textContent = `${data.name}, ${data.sys.country}`;
-      weatherElement.textContent = `${data.weather[0].main}, ${Math.round(
-        data.main.temp
-      )}°C`;
+      weatherElement.textContent = `${data.name}, ${data.sys.country}, ${
+        data.weather[0].main
+      }, ${Math.round(data.main.temp)}°C`;
     })
     .catch((error) => {
       console.error('Error fetching weather data:', error);
     });
 }
 
-function handleGeolocationError(error) {
-  console.error('Error getting geolocation:', error);
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(displayLocation, (error) => {
+    console.error('Error getting geolocation:', error);
+  });
+} else {
+  console.error('Geolocation is not supported in this browser.');
 }
-
-function initGeolocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      displayLocation,
-      handleGeolocationError
-    );
-  } else {
-    console.error('Geolocation is not supported in this browser.');
-  }
-}
-
-// Initialize all components
-function initApp() {
-  initClock();
-  initNameAndGreeting();
-  initTodoList();
-  setBackgroundImage();
-  initGeolocation();
-}
-
-initApp();
