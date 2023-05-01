@@ -1,5 +1,6 @@
 const UNSPLASH_API_KEY = 'DYWZDzYyj9BIU9ezT9j00UG8sqjm7KdOzxUQAxoueFs';
 const OPENWEATHERMAP_API_KEY = 'ba0a7ac8b4aa1d89506ec1b502dd04cb';
+const PROJECT_DOMAIN = 'https://chaevid.github.io/vanilla-javascript';
 
 // Clock
 function updateTime() {
@@ -118,7 +119,7 @@ function setBackgroundImage() {
       console.error('Error fetching background image:', error);
       document.querySelector(
         '.background'
-      ).style.backgroundImage = `url('/src/bg-image-unsplash.jpg')`;
+      ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
     });
 }
 
@@ -146,9 +147,6 @@ function getWeather(latitude, longitude) {
     })
     .catch((error) => {
       console.error('Error fetching weather data:', error);
-      document.querySelector(
-        '.background'
-      ).style.backgroundImage = `url('/src/bg-image-unsplash.jpg')`;
     });
 }
 
