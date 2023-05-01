@@ -54,14 +54,6 @@ if (storedName) {
   greeting.textContent = '';
 }
 
-//
-// const savedName = localStorage.getItem('name');
-// if (savedName) {
-//   nameInput.style.display = 'none';
-//   // displayGreeting(savedName);
-//   greeting.style.display = 'block';
-//   todoInput.style.display = 'block';
-// }
 function saveTodos(todos) {
   localStorage.setItem('todos', JSON.stringify(todos));
 }
@@ -110,52 +102,50 @@ function setBackgroundImage() {
   document.querySelector(
     '.background'
   ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
-  // fetch(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_API_KEY}`)
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     document.querySelector(
-  //       '.background'
-  //     ).style.backgroundImage = `url(${data.urls.regular})`;
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error fetching background image:', error);
-  //     document.querySelector(
-  //       '.background'
-  //     ).style.backgroundImage = `url('${PROJECT_DOMAIN}/src/bg-image-unsplash.jpg')`;
-  //   });
 }
 
 setBackgroundImage();
 
 // Geolocation
 function displayLocation(position) {
-  const latlonElement = document.querySelector('.latlon');
-  latlonElement.textContent = `Lat: ${position.coords.latitude.toFixed(
-    2
-  )}, Lon: ${position.coords.longitude.toFixed(2)}`;
-  getWeather(position.coords.latitude, position.coords.longitude);
+  const { latitude, longitude } = position.coords;
+  getWeather(latitude, longitude);
+}
+
+function handleWeatherData(data) {
+  const locationElement = document.querySelector('.location');
+  const weatherElement = document.querySelector('.weather');
+  locationElement.textContent = `${data.name}, ${data.sys.country}`;
+  weatherElement.textContent = `${data.weather[0].main}, ${Math.round(
+    data.main.temp
+  )}°C`;
+}
+
+function handleWeatherError(error) {
+  console.error('Error fetching weather data:', error);
 }
 
 function getWeather(latitude, longitude) {
-  fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OPENWEATHERMAP_API_KEY}&units=metric`
-  )
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OPENWEATHERMAP_API_KEY}&units=metric`;
+  fetch(url)
     .then((response) => response.json())
-    .then((data) => {
-      const weatherElement = document.querySelector('.weather');
-      weatherElement.textContent = `${data.name}, ${data.sys.country}, ${
-        data.weather[0].main
-      }, ${Math.round(data.main.temp)}°C`;
-    })
-    .catch((error) => {
-      console.error('Error fetching weather data:', error);
-    });
+    .then(handleWeatherData)
+    .catch(handleWeatherError);
 }
 
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(displayLocation, (error) => {
-    console.error('Error getting geolocation:', error);
-  });
-} else {
-  console.error('Geolocation is not supported in this browser.');
+function handleGeolocationError(error) {
+  console.error('Error getting geolocation:', error);
 }
+
+function initGeolocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      displayLocation,
+      handleGeolocationError
+    );
+  } else {
+    console.error('Geolocation is not supported in this browser.');
+  }
+}
+
+initGeolocation();
