@@ -1,3 +1,6 @@
+const UNSPLASH_API_KEY = process.env.UNSPLASH_API_KEY;
+const OPENWEATHERMAP_API_KEY = process.env.OPENWEATHERMAP_API_KEY;
+
 // Clock
 function updateTime() {
   const clock = document.querySelector('.clock');
@@ -104,9 +107,7 @@ displayTodos(JSON.parse(localStorage.getItem('todos')) || []);
 
 // Background Image
 function setBackgroundImage() {
-  fetch(
-    `https://api.unsplash.com/photos/random?client_id=${process.env.UNSPLASH_API_KEY}`
-  )
+  fetch(`https://api.unsplash.com/photos/random?client_id=${UNSPLASH_API_KEY}`)
     .then((response) => response.json())
     .then((data) => {
       document.querySelector(
@@ -134,7 +135,7 @@ function displayLocation(position) {
 
 function getWeather(latitude, longitude) {
   fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.OPENWEATHERMAP_API_KEY}&units=metric`
+    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${OPENWEATHERMAP_API_KEY}&units=metric`
   )
     .then((response) => response.json())
     .then((data) => {
